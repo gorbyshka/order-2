@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Stage, Layer, Rect, Transformer, Image } from "react-konva";
 import { useImageStage } from "./useImageStage.js";
 import Mark from "./Mark";
 
-const PhotoEditor = ({ image, imageDimensions, initialColor: editorInitialColor, rectangles, onRectanglesChange, photoId, }) => {
+const PhotoEditor = ({ image, imageDimensions, initialColor: editorInitialColor, rectangles, onRectanglesChange, photoId, onRectanglesExistenceChange }) => {
     const {
         rectanglesToDraw,
         initialColor,
@@ -22,6 +22,7 @@ const PhotoEditor = ({ image, imageDimensions, initialColor: editorInitialColor,
         if (!areRectanglesEqual(rectanglesToDraw, rectangles)) {
             setRectangles(rectanglesToDraw);
             onRectanglesChange(photoId, rectanglesToDraw);
+            
         }
     }, [rectanglesToDraw, photoId, rectangles, setRectangles, onRectanglesChange]);
 

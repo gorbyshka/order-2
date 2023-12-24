@@ -4,8 +4,9 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import useImage from "use-image";
 import PhotoEditor from "./components/PhotoEditor/PhotoEditor";
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Select, MenuItem } from "@mui/material";
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import SettingsModal from './components/PhotoEditor/SettingsModal.jsx';
 
@@ -25,6 +26,7 @@ const App = () => {
     const [rectangles, setRectangles] = useState([]);
     const [rectanglesToDraw, setRectanglesToDraw] = useState([]);
     const [photoId, setPhotoId] = useState(null);
+
 
     useEffect(() => {
         const filteredImages = images.filter(uploadedImage =>
@@ -96,19 +98,19 @@ const App = () => {
 
     const handleRectanglesChange = (photoId, newRectangles) => {
         setImageRectangles((prevImageRectangles) => {
-            
+
             const updatedRectangles = {
                 ...prevImageRectangles,
                 [photoId]: newRectangles,
             };
-    
+
             const allRectangles = Object.values(updatedRectangles).flat();
             setRectanglesToDraw(allRectangles);
-    
+
             return updatedRectangles;
         });
     };
-            
+
     const handleRectanglesInitialization = (newImageUrl) => {
         const initialRectangles = loadRectanglesFromLocalStorage(newImageUrl);
         setImageRectangles((prevImageRectangles) => ({
@@ -118,31 +120,31 @@ const App = () => {
         setSelectedImageRectangles(initialRectangles);
         setRectanglesToDraw(initialRectangles);
     };
-    
+
     useEffect(() => {
         const storedRectangles = loadRectanglesFromLocalStorage(selectedImage);
         setSelectedImageRectangles(storedRectangles);
         setRectanglesToDraw(storedRectangles);
-        setRectangles(storedRectangles);  
-    
+        setRectangles(storedRectangles);
+
     }, [selectedImage]);
-       
+
 
     const loadRectanglesFromLocalStorage = (imageUrl) => {
         const storedRectangles = JSON.parse(localStorage.getItem("rectangles")) || {};
         return storedRectangles[imageUrl] || [];
     };
-    
+
     const handleImageChange = (newImageUrl) => {
         setPhotoId(newImageUrl);
         setSelectedImage(newImageUrl);
         setImageUrl(newImageUrl);
-    
+
         const rectanglesForImage = loadRectanglesFromLocalStorage(newImageUrl);
         setRectangles(rectanglesForImage);
         setRectanglesToDraw(rectanglesForImage);
     };
-    
+
     const handleExport = () => {
         const jsonData = JSON.stringify(imageRectangles);
         const blob = new Blob([jsonData], { type: 'application/json' });
@@ -167,8 +169,14 @@ const App = () => {
 
                 </Button>
 
-                <Button sx={{ marginTop: '10px', marginLeft: '10px' }} variant="contained" onClick={handleSettingsOpen}>
-                    Settings
+                <Button sx={{
+                    marginTop: '-36px',
+                    marginLeft: '154px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }} variant="contained" onClick={handleSettingsOpen}  >
+                    <SettingsIcon />
                 </Button>
 
                 <TextField
@@ -262,7 +270,6 @@ const App = () => {
                     rectangles={imageRectangles[selectedImage] || []}
                     onRectanglesChange={handleRectanglesChange}
                     photoId={selectedImage}
-                    loadRectanglesFromLocalStorage={loadRectanglesFromLocalStorage}
                 />
             )}
 
